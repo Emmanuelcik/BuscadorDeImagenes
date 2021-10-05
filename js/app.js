@@ -14,8 +14,22 @@ function validarForm(e){
         mostrarAlerta("Es necesario agregar un término de busqueda");
         return;
     }
-}
 
+    buscarImagenes(terminoBusqueda);
+
+}
+function buscarImagenes (termino) {
+    const key ="23702476-24505d11d2938c47125f9c28d";
+    const url = `https://pixabay.com/api/?key=${key}&q=${termino}`;
+    fetch(url)
+        .then(response => response.json())
+        .then(response => {
+            mostrarImagenes(response.hits)
+        })
+}
+function mostrarImagenes(){
+    console.log("here");
+}
 function mostrarAlerta(mensaje){
     const existeAlerta = document.querySelector(".bg-red-100");
     if(!existeAlerta){
