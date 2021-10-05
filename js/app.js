@@ -1,7 +1,13 @@
 const resultado = document.querySelector("#resultado");
+
 const formulario = document.querySelector("#formulario");
 resultado.style.maxWidth = "1000px";
 resultado.style.width = "90%";
+
+const paginacionDiv = document.querySelector("#paginacion");
+paginacionDiv.style.width = "90%";
+paginacionDiv.style.marginLeft = "auto";
+paginacionDiv.style.marginRight = "auto";
 
 const registrosPerPage = 40;
 let totalPaginas;
@@ -26,19 +32,20 @@ function validarForm(e){
 }
 function buscarImagenes (termino) {
     const key ="23702476-24505d11d2938c47125f9c28d";
-    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=100`;
+    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPerPage}`;
     fetch(url)
         .then(response => response.json())
         .then(response => {
             totalPaginas = calcularPaginas(response.totalHits);
-            console.log(totalPaginas)
+            // console.log(totalPaginas)
             mostrarImagenes(response.hits)
         })
 }
 //Generador que registra la cantidad de elementos de acuerdo a las paginas 
-function crearPaginador(total){
+
+function *crearPaginador(total){
     for(let i = 0; i <= total; i++){
-        console.log(i);
+        yield i;
     }
 }
 function calcularPaginas(total){
@@ -73,11 +80,29 @@ function mostrarImagenes(imagenes){
         </div>
         `;
     });
+    //Limpiar pagiador previo
+    while(paginacionDiv.firstChild){
+        paginacionDiv.removeChild(paginacionDiv.firstChild)
+    }
     imprimirPaginador();
 }
 function  imprimirPaginador() {
     iterador = crearPaginador(totalPaginas);
+    while(true){
+        const {value, done} = iterador.next();
+        if(done) return
+
+        const boton = document.createElement("a");
+        boton.href = "#";
+        boton.dataset.pagina = value;
+        boton.textContent = value;
+        boton.classList.add("siguiente", "bg-yellow-400", "px-4", "py-1", "mr-1", "font-bold", "mb-1",
+        "uppercase", "rounded");
+        paginacionDiv.append(boton);
+    }
+    
 }
+
 function mostrarAlerta(mensaje){
     const existeAlerta = document.querySelector(".bg-red-100");
     if(!existeAlerta){
