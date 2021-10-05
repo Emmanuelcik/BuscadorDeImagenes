@@ -5,6 +5,7 @@ resultado.style.width = "90%";
 
 const registrosPerPage = 40;
 let totalPaginas;
+let iterador;
 
 window.onload = () => {
     formulario.addEventListener("submit", validarForm);
@@ -33,6 +34,12 @@ function buscarImagenes (termino) {
             console.log(totalPaginas)
             mostrarImagenes(response.hits)
         })
+}
+//Generador que registra la cantidad de elementos de acuerdo a las paginas 
+function crearPaginador(total){
+    for(let i = 0; i <= total; i++){
+        console.log(i);
+    }
 }
 function calcularPaginas(total){
     return parseInt(Math.ceil(total / registrosPerPage))
@@ -66,6 +73,10 @@ function mostrarImagenes(imagenes){
         </div>
         `;
     });
+    imprimirPaginador();
+}
+function  imprimirPaginador() {
+    iterador = crearPaginador(totalPaginas);
 }
 function mostrarAlerta(mensaje){
     const existeAlerta = document.querySelector(".bg-red-100");
