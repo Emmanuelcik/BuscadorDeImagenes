@@ -2,6 +2,10 @@ const resultado = document.querySelector("#resultado");
 const formulario = document.querySelector("#formulario");
 resultado.style.maxWidth = "1000px";
 resultado.style.width = "90%";
+
+const registrosPerPage = 40;
+let totalPaginas;
+
 window.onload = () => {
     formulario.addEventListener("submit", validarForm);
 }
@@ -25,9 +29,15 @@ function buscarImagenes (termino) {
     fetch(url)
         .then(response => response.json())
         .then(response => {
+            totalPaginas = calcularPaginas(response.totalHits);
+            console.log(totalPaginas)
             mostrarImagenes(response.hits)
         })
 }
+function calcularPaginas(total){
+    return parseInt(Math.ceil(total / registrosPerPage))
+}
+
 function mostrarImagenes(imagenes){
     console.log(imagenes)
     while(resultado.firstChild){
